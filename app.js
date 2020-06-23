@@ -52,6 +52,6 @@ const server = http.createServer((req, res) => {
 	}
 });
 
-server.listen(3000, 'localhost', () => {
+server.listen(process.env.PORT, 'localhost', () => {
 	console.log('Listening to requests on port 3000...');
 });
