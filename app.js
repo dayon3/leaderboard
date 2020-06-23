@@ -1,57 +1,49 @@
 const fs = require('fs');
-const http = require('http');
-const axios = require('axios');
+const express = require('express');
+const fetch = require('node-fetch');
 
 const replaceTemplate = require('./modules/replaceTemplate');
 const sortList = require('./modules/sortList');
 
-//SERVER
+const app = express();
+
+// MIDDLEWARE
+console.log(process.env.NODE_ENV);
+app.use(express.static(`${__dirname}/public`));
 const tempOverview = fs.readFileSync(
-	`${__dirname}/templates/template-overview.html`,
+	`${__dirname}/public/templates/template-overview.html`,
 	'utf-8'
 );
 const tempUser = fs.readFileSync(
-	`${__dirname}/templates/template-user.html`,
+	`${__dirname}/public/templates/template-user.html`,
 	'utf-8'
 );
 
-const data = fs.readFileSync(`${__dirname}/data/data.json`, 'utf-8');
-const dataObj = JSON.parse(data);
+let url =
+	'https://gist.githubusercontent.com/dayon3/60ec6c15668f74c056b11ec26dc51629/raw/90003c5b69f4f704e0eb310668fcc86d3ab996f1/user-data.json';
+let data;
+(async () => {
+	const response = await fetch(url);
+	const json = await response.json();
 
-const server = http.createServer((req, res) => {
-	console.log(req.url);
-	const pathName = req.url;
+	data = json;
+})();
 
-	// Overview page
-	if (pathName === '/' || pathName === '/overview') {
-		res.writeHead(200, { 'Content-type': 'text/html' });
-
-		const sortedData = dataObj.sort(sortList);
-		for (let index = 0; index < sortedData.length; index++) {
-			const element = sortedData[index];
-			element['id'] = index + 1;
-		}
-		const userHtml = sortedData
-			.map((el) => replaceTemplate(tempUser, el))
-			.join('');
-		const output = tempOverview.replace(/{%USERLIST%}/g, userHtml);
-		res.end(output);
-
-		// API
-	} else if (pathName === '/api') {
-		res.writeHead(200, { 'Content-type': 'application/json' });
-		const readable = fs.createReadStream(`${__dirname}/data/data.json`);
-		readable.pipe(res);
-
-		// Not found
-	} else {
-		res.writeHead(404, {
-			'Content-type': 'text/html',
-		});
-		res.end('<h1>Page not found!</h1>');
+app.get('/', (req, res) => {
+	const sortedData = data.sort(sortList);
+	for (let index = 0; index < sortedData.length; index++) {
+		const element = sortedData[index];
+		element['id'] = index + 1;
 	}
+	const userHtml = sortedData
+		.map((el) => replaceTemplate(tempUser, el))
+		.join('');
+	const output = tempOverview.replace(/{%USERLIST%}/g, userHtml);
+	res.send(output);
 });
 
-server.listen(process.env.PORT, 'localhost', () => {
-	console.log('Listening to requests on port 3000...');
+app.get('/api/v1/users', (req, res) => {
+	res.json(data);
 });
+
+module.exports = app;

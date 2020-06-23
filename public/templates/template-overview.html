@@ -8,7 +8,7 @@
 			rel="icon"
 			type="image/png"
 			sizes="32x32"
-			href="../data/img/favicon-32x32.png"
+			href="../img/favicon-32x32.png"
 		/>
 
 		<style>
@@ -54,76 +54,59 @@
 				background: aquamarine;
 			}
 
-			h1 {
-				font-size: 2.5rem;
-			}
-
-			nav {
-				display: flex;
-				justify-content: flex-start;
-				padding: 2rem;
-				background: darkblue;
-				height: 8rem;
-			}
-
-			nav > h1 {
-				line-height: normal;
-			}
-
 			.container {
 				width: 120rem;
 				margin: 0 auto;
+				text-align: center;
 			}
 
-			ul {
-				list-style: none;
+			table {
 				margin: 3rem auto;
+				width: 100%;
+			}
+
+			table,
+			thead {
+				border: 1px solid #333;
+			}
+
+			thead > tr {
+				background-color: white;
+				height: 5rem;
 			}
 
 			.row {
-				position: relative;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
 				font-size: 1.8rem;
-				padding: 3rem;
-				width: 100%;
-				height: 40px;
+				height: 4rem;
 			}
 
 			.number {
-				display: inline-block;
-				width: 3rem;
-				margin-right: 1rem;
 				font-weight: bold;
 			}
 
-			/* Gold */
-			.list > li:nth-child(1) {
-				background: gold;
-			}
-			/* Silver */
-			.list > li:nth-child(2) {
-				background: #c0c0c0;
-			}
-			/* Bronze */
-			.list > li:nth-child(3) {
-				background: #cd7f32;
-			}
-
-			li:nth-child(even) {
+			tbody .row:nth-child(even) {
 				background: transparent;
 			}
-			li:nth-child(odd) {
+			tbody .row:nth-child(odd) {
 				background: #fff;
 				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
 					0 1px 2px 0 rgba(0, 0, 0, 0.06);
 			}
 
+			/* Gold */
+			tbody .row:nth-child(1) {
+				background: gold;
+			}
+			/* Silver */
+			tbody .row:nth-child(2) {
+				background: #c0c0c0;
+			}
+			/* Bronze */
+			tbody .row:nth-child(3) {
+				background: #cd7f32;
+			}
+
 			@media screen and (max-width: 600px) {
-				ul {
-					margin: 0;
-				}
 				.container {
 					width: 100%;
 					margin: 0;
@@ -138,10 +121,10 @@
 	<body>
 		<nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
 			<div class="flex items-center flex-shrink-0 text-white mr-6">
-				<img src="../data/img/favicon-32x32.png" alt="logo" />
-				<span class="font-semibold text-xl tracking-tight"
-					>HNGi7 Central Leaderboard (Sorted)</span
-				>
+				<img src="../img/favicon-32x32.png" alt="logo" />
+				<h1 class="font-bold text-4xl tracking-tight ml-6">
+					HNGi7 Central Leaderboard (Sorted)
+				</h1>
 			</div>
 			<div class="block lg:hidden">
 				<button
@@ -157,22 +140,24 @@
 					</svg>
 				</button>
 			</div>
-			<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-				<div>
-					<a
-						href="#"
-						class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-						>Download</a
-					>
-				</div>
-			</div>
 		</nav>
 
 		<main>
 			<div class="container">
-				<ul class="list">
-					{%USERLIST%}
-				</ul>
+				<table>
+					<thead>
+						<tr>
+							<th colspan="1">NO.</th>
+							<th colspan="1">FULL NAME</th>
+							<th colspan="1">USERNAME</th>
+							<th colspan="1">EMAIL</th>
+							<th colspan="1">TOTAL POINTS</th>
+						</tr>
+					</thead>
+					<tbody class="list">
+						{%USERLIST%}
+					</tbody>
+				</table>
 			</div>
 		</main>
 	</body>

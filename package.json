@@ -4,12 +4,14 @@
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"start": "nodemon app.js"
+		"start": "nodemon server.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"axios": "^0.19.2"
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"node-fetch": "^2.6.0"
 	}
 }
